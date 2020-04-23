@@ -8,7 +8,7 @@ function Delorean:init()
 	self.height = self.image:getHeight()
 
 	self.x = 10
-	self.y = VIRTUAL_HEIGHT - 200
+	self.y = VIRTUAL_HEIGHT - 30
 	self.dy = 0
 end
 

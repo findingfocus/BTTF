@@ -27,9 +27,9 @@ local frontScroll = 0
 
 local delorean = Delorean()
 
-BACKGROUND_SCROLL_SPEED = 10
-MIDDLE_SCROLL_SPEED = 30
-FRONT_SCROLL_SPEED = 60
+local BACKGROUND_SCROLL_SPEED = 0
+local MIDDLE_SCROLL_SPEED = 0
+local FRONT_SCROLL_SPEED = 0
 
 LOOPING_POINT = 1000
 
@@ -99,6 +99,11 @@ function love.update(dt)
 	frontScroll = (frontScroll + FRONT_SCROLL_SPEED * dt)
 		% LOOPING_POINT
 
+	if love.keyboard.isDown('right') then
+		BACKGROUND_SCROLL_SPEED = BACKGROUND_SCROLL_SPEED + 1 * dt
+		MIDDLE_SCROLL_SPEED = MIDDLE_SCROLL_SPEED + 5 * dt
+		FRONT_SCROLL_SPEED = FRONT_SCROLL_SPEED + 40 * dt
+	end
 	delorean:update(dt)
 
 	love.keyboard.keysPressed = {} 
