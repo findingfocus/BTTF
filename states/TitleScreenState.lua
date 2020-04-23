@@ -5,17 +5,21 @@ function TitleScreenState:init()
 end
 
 function TitleScreenState:update(dt)
+	sounds['titleMusic']:setLooping(true)
+	sounds['titleMusic']:play()
+	
 	if love.keyboard.wasPressed('enter') or love.keyboard.wasPressed('return') then
+		sounds['titleMusic']:stop()
 		gStateMachine:change('play')
 	end
 
-	backgroundScroll = (backgroundScroll + BACKGROUND_SCROLL_SPEED + .5 * dt)
+	backgroundScroll = (backgroundScroll + BACKGROUND_SCROLL_SPEED + 1 * dt)
 		% LOOPING_POINT
 
 	middleScroll = (middleScroll + MIDDLE_SCROLL_SPEED + 2 * dt)
 		% LOOPING_POINT
 
-	frontScroll = (frontScroll + FRONT_SCROLL_SPEED + 15 * dt)
+	frontScroll = (frontScroll + FRONT_SCROLL_SPEED + 18 * dt)
 		% LOOPING_POINT
 end
 

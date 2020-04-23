@@ -8,6 +8,8 @@ function PlayState:init()
 end
 
 function PlayState:update(dt)
+	sounds['playMusic']:setLooping(true)
+	sounds['playMusic']:play()
 	--scrolls screen based on input
 	backgroundScroll = (backgroundScroll + BACKGROUND_SCROLL_SPEED * dt)
 		% LOOPING_POINT
