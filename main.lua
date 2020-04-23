@@ -4,7 +4,11 @@ Class = require 'class'
 
 require 'Delorean'
 
-require 'Player'
+require 'StateMachine'
+
+require '/states/BaseState'
+require '/states/PlayState'
+require '/states/TitleScreenState'
 
 --1280 800
 WINDOW_WIDTH = 1280
@@ -16,26 +20,22 @@ VIRTUAL_WIDTH = 600
 VIRTUAL_HEIGHT = 375
 
 
-local background = love.graphics.newImage('graphics/background.png')
-local backgroundScroll = 0
+background = love.graphics.newImage('graphics/background.png')
+backgroundScroll = 0
 
-local middle = love.graphics.newImage('graphics/middle.png')
-local middleScroll = 0
+middle = love.graphics.newImage('graphics/middle.png')
+middleScroll = 0
 
-local front = love.graphics.newImage('graphics/front.png')
-local frontScroll = 0
+front = love.graphics.newImage('graphics/front.png')
+frontScroll = 0
 
-local delorean = Delorean()
-
-local BACKGROUND_SCROLL_SPEED = 0
-local MIDDLE_SCROLL_SPEED = 0
-local FRONT_SCROLL_SPEED = 0
+BACKGROUND_SCROLL_SPEED = 0
+MIDDLE_SCROLL_SPEED = 0
+FRONT_SCROLL_SPEED = 0
 
 LOOPING_POINT = 1000
 
 delorean = Delorean()
-
-
 
 
 
@@ -60,6 +60,12 @@ function love.load()
 		fullscreen = true,
 		resizable = true
 	})
+
+	gStateMachine = StateMachine {
+		['title'] = function() return TitleScreenState() end,
+		['play'] = function() return PlayState() end
+	}
+	gStateMachine:change('title')
 
 	love.keyboard.keysPressed = {}
 
@@ -90,30 +96,8 @@ end
 
 
 function love.update(dt)
-	backgroundScroll = (backgroundScroll + BACKGROUND_SCROLL_SPEED * dt)
-		% LOOPING_POINT
 
-	middleScroll = (middleScroll + MIDDLE_SCROLL_SPEED * dt)
-		% LOOPING_POINT
-
-	frontScroll = (frontScroll + FRONT_SCROLL_SPEED * dt)
-		% LOOPING_POINT
-
-	if love.keyboard.isDown('right') then
-		BACKGROUND_SCROLL_SPEED = BACKGROUND_SCROLL_SPEED + 1 * dt
-		MIDDLE_SCROLL_SPEED = MIDDLE_SCROLL_SPEED + 5 * dt
-		FRONT_SCROLL_SPEED = FRONT_SCROLL_SPEED + 40 * dt
-
-	elseif BACKGROUND_SCROLL_SPEED > 0 then
-		BACKGROUND_SCROLL_SPEED = BACKGROUND_SCROLL_SPEED - 2 * dt
-		MIDDLE_SCROLL_SPEED = MIDDLE_SCROLL_SPEED - 10 * dt
-		FRONT_SCROLL_SPEED = FRONT_SCROLL_SPEED - 80 * dt
-
-	else
-		BACKGROUND_SCROLL_SPEED = BACKGROUND_SCROLL_SPEED * dt
-		MIDDLE_SCROLL_SPEED = MIDDLE_SCROLL_SPEED * dt
-		FRONT_SCROLL_SPEED = FRONT_SCROLL_SPEED * dt
-	end
+	gStateMachine:update(dt)
 	delorean:update(dt)
 
 	love.keyboard.keysPressed = {} 
@@ -127,13 +111,7 @@ end
 function love.draw()
 	push:start()
 
-	love.graphics.draw(background, -backgroundScroll, 0)
-	love.graphics.draw(middle, -middleScroll, 0)
-	love.graphics.draw(front, -frontScroll, 0)
-	delorean:render()
-
-	love.graphics.printf('Back to the Future', 0, 20, VIRTUAL_WIDTH, 'center')
-	--love.graphics.printf('the game', 0, 55, VIRTUAL_WIDTH, 'center')
+	gStateMachine:render()
 
 	push:finish()
 end

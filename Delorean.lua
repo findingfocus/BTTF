@@ -2,13 +2,14 @@ Delorean = Class{}
 
 local GRAVITY = 10
 
+
 function Delorean:init()
 	self.image = love.graphics.newImage('graphics/delorean.png')
 	self.width = self.image:getWidth()
 	self.height = self.image:getHeight()
 
 	self.x = 10
-	self.y = VIRTUAL_HEIGHT - 30
+	self.y = 375 - 110
 	self.dy = 0
 end
 
