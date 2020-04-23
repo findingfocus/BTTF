@@ -33,6 +33,8 @@ FRONT_SCROLL_SPEED = 60
 
 LOOPING_POINT = 1000
 
+delorean = Delorean()
+
 
 
 
@@ -96,6 +98,8 @@ function love.update(dt)
 
 	frontScroll = (frontScroll + FRONT_SCROLL_SPEED * dt)
 		% LOOPING_POINT
+
+	delorean:update(dt)
 
 	love.keyboard.keysPressed = {} 
 end
