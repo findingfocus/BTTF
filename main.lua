@@ -45,6 +45,7 @@ function love.load()
 	love.window.setTitle('BTTF')
 
 	normalFont = love.graphics.newFont('BTTF.ttf', 30)
+	smallFont = love.graphics.newFont('BTTF.ttf', 10)
 	love.graphics.setFont(normalFont)
 
 	sounds = {
