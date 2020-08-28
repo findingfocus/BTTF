@@ -30,8 +30,7 @@ function TitleScreenState:render()
 	love.graphics.draw(front, -frontScroll, 0)
 	love.graphics.setFont(normalFont)
 	love.graphics.printf('Back to the Future', 0, 30, VIRTUAL_WIDTH, 'center')
-	love.graphics.printf('the game', 0, 65, VIRTUAL_WIDTH, 'center')
 	love.graphics.setFont(smallFont)
-	love.graphics.printf('press enter to start', 0 , VIRTUAL_HEIGHT/ 2, VIRTUAL_WIDTH, 'center')
+	love.graphics.printf('press enter to start', 0, VIRTUAL_HEIGHT / 2, VIRTUAL_WIDTH, 'center')
 
 end

@@ -11,7 +11,7 @@ require '/states/PlayState'
 require '/states/TitleScreenState'
 
 --1280 800
-WINDOW_WIDTH = 1200
+WINDOW_WIDTH = 1280
 WINDOW_HEIGHT = 800
 
 
