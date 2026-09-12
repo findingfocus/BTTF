@@ -7,11 +7,13 @@ function WinState:init()
 end
 
 function WinState:enter()
+	-- REMEMBER WHICH SCREEN IS SHOWING FOR TOUCH ZONES
+	gameState = 'win'
 	sounds['seriousStuff']:play()
 end
 
 function WinState:update(dt)
-	if love.keyboard.wasPressed('enter') or love.keyboard.wasPressed('return') then
+	if love.keyboard.wasPressed('enter') or love.keyboard.wasPressed('return') or love.keyboard.wasPressed('space') then
 		gStateMachine:change('play')
 	elseif love.keyboard.wasPressed('t') then
 		gStateMachine:change('title')

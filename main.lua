@@ -38,6 +38,8 @@ LOOPING_POINT = 1000
 
 -- 88MPH TIME TRIAL STATE, RESET EVERY RUN
 -- GAMESPEED DRIVES THE SPEEDOMETER, THE SCROLLING, AND THE OBSTACLES
+-- WHICH SCREEN IS SHOWING: TITLE, PLAY, OR WIN
+gameState = 'title'
 gameSpeed = 0
 obstacles = {}
 spawnTimer = 0
@@ -64,7 +66,7 @@ function love.load()
 
 	push:setupScreen(VIRTUAL_WIDTH, VIRTUAL_HEIGHT, WINDOW_WIDTH, WINDOW_HEIGHT, {
 		vsync = true,
-		fullscreen = true,
+		fullscreen = false,
 		resizable = false,
 		highdpi = false
 	})
@@ -95,9 +97,68 @@ end
 function love.keyboard.wasPressed(key)
 	if love.keyboard.keysPressed[key] then
 		return true
+	elseif love.keyboard.virtualKeysPressed and love.keyboard.virtualKeysPressed[key] then
+		return true
 	else
 		return false
 	end
+end
+
+-- TOUCH AND MOUSE ZONES: LEFT HALF OF THE SCREEN FLIES, RIGHT HALF ACCELERATES
+-- MOUSE USES THE SAME ZONES SO PHONE CONTROLS CAN BE TESTED ON DESKTOP
+-- PHONES SEND BOTH TOUCH AND FAKE MOUSE EVENTS FOR ONE TAP
+-- ONCE A REAL TOUCH ARRIVES, IGNORE THE MOUSE SO TAPS NEVER DOUBLE FIRE
+local touchScreenSeen = false
+
+function love.mousepressed(touchX, touchY, button)
+	if touchScreenSeen then return end
+	handleTouchZone(touchX, true)
+end
+
+function love.mousereleased(touchX, touchY, button)
+	if touchScreenSeen then return end
+	handleTouchZone(touchX, false)
+end
+
+function love.touchpressed(touchId, touchX, touchY)
+	touchScreenSeen = true
+	handleTouchZone(touchX, true)
+end
+
+function love.touchreleased(touchId, touchX, touchY)
+	handleTouchZone(touchX, false)
+end
+
+function handleTouchZone(touchX, isPressed)
+	local gameX = push:toGame(touchX, 0)
+	if not gameX then return end
+
+	love.keyboard.virtualKeysDown = love.keyboard.virtualKeysDown or {}
+	love.keyboard.virtualKeysPressed = love.keyboard.virtualKeysPressed or {}
+
+	-- TITLE AND WIN SCREENS: ANY TAP IS THE ACTION BUTTON
+	if gameState ~= 'play' then
+		if isPressed then love.keyboard.virtualKeysPressed['space'] = true end
+		return
+	end
+
+	-- PLAY: LEFT HALF TAPS FLY, RIGHT HALF HELD ACCELERATES
+	if isPressed and gameX < VIRTUAL_WIDTH / 2 then
+		love.keyboard.virtualKeysPressed['space'] = true
+	elseif gameX >= VIRTUAL_WIDTH / 2 then
+		love.keyboard.virtualKeysDown['right'] = isPressed
+	end
+end
+
+-- HELD KEYS ALSO INCLUDE TOUCH AND MOUSE ZONES
+local originalKeyboardIsDown = love.keyboard.isDown
+function love.keyboard.isDown(...)
+	for keyIndex, key in ipairs({...}) do
+		if love.keyboard.virtualKeysDown and love.keyboard.virtualKeysDown[key] then
+			return true
+		end
+	end
+	return originalKeyboardIsDown(...)
 end
 
 
@@ -109,7 +170,8 @@ function love.update(dt)
 	gStateMachine:update(dt)
 	delorean:update(dt)
 
-	love.keyboard.keysPressed = {} 
+	love.keyboard.keysPressed = {}
+	love.keyboard.virtualKeysPressed = {}
 end
 
 

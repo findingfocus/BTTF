@@ -21,6 +21,7 @@ end
 
 function PlayState:enter()
 	-- FRESH RUN EVERY TIME PLAY STARTS
+	gameState = 'play'
 	gameSpeed = 0
 	obstacles = {}
 	spawnTimer = 1.5
@@ -28,7 +29,9 @@ function PlayState:enter()
 	MIDDLE_SCROLL_SPEED = 0
 	FRONT_SCROLL_SPEED = 0
 	delorean = Delorean()
+	-- DROP START-UP KEYS SO THEY DO NOT LEAK INTO THE RUN
 	love.keyboard.keysPressed = {}
+	love.keyboard.virtualKeysPressed = {}
 end
 
 local function collides(playerX, playerY, playerWidth, playerHeight, obstacleX, obstacleY, obstacleWidth, obstacleHeight)

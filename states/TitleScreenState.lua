@@ -6,6 +6,7 @@ end
 
 function TitleScreenState:enter()
 	-- CLEAN SLATE SO REPLAYS ALWAYS START THE SAME
+	gameState = 'title'
 	gameSpeed = 0
 	obstacles = {}
 	spawnTimer = 1.5
