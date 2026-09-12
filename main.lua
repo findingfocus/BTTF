@@ -9,13 +9,14 @@ require 'StateMachine'
 require '/states/BaseState'
 require '/states/PlayState'
 require '/states/TitleScreenState'
+require '/states/WinState'
 
---1280 800
+-- WINDOW SIZE IN REAL PIXELS
 WINDOW_WIDTH = 1280
 WINDOW_HEIGHT = 800
 
 
---600 375
+-- GAME WORLD SIZE IN VIRTUAL PIXELS, PUSH SCALES IT UP
 VIRTUAL_WIDTH = 600
 VIRTUAL_HEIGHT = 375
 
@@ -35,6 +36,12 @@ FRONT_SCROLL_SPEED = 0
 
 LOOPING_POINT = 1000
 
+-- 88MPH TIME TRIAL STATE, RESET EVERY RUN
+-- GAMESPEED DRIVES THE SPEEDOMETER, THE SCROLLING, AND THE OBSTACLES
+gameSpeed = 0
+obstacles = {}
+spawnTimer = 0
+
 delorean = Delorean()
 
 
@@ -49,8 +56,10 @@ function love.load()
 	love.graphics.setFont(normalFont)
 
 	sounds = {
-		['titleMusic'] = love.audio.newSource('music/MartysLetter.mp3', 'static'),
-		['playMusic'] = love.audio.newSource('music/Gigawatts.mp3', 'static')
+		['titleMusic'] = love.audio.newSource('sounds/MartysLetter.mp3', 'static'),
+		['playMusic'] = love.audio.newSource('sounds/Gigawatts.mp3', 'static'),
+		['crash'] = love.audio.newSource('sounds/crash.mp3', 'static'),
+		['seriousStuff'] = love.audio.newSource('sounds/seriousStuff.mp3', 'static')
 	}
 
 	push:setupScreen(VIRTUAL_WIDTH, VIRTUAL_HEIGHT, WINDOW_WIDTH, WINDOW_HEIGHT, {
@@ -61,7 +70,8 @@ function love.load()
 
 	gStateMachine = StateMachine {
 		['title'] = function() return TitleScreenState() end,
-		['play'] = function() return PlayState() end
+		['play'] = function() return PlayState() end,
+		['win'] = function() return WinState() end
 	}
 	gStateMachine:change('title')
 
@@ -111,13 +121,5 @@ function love.draw()
 
 	gStateMachine:render()
 
-	displayFPS()
-
 	push:finish()
-end
-
-function displayFPS()
-	love.graphics.setFont(smallFont)
-	love.graphics.setColor(0/255, 255/255, 0/255, 255/255)
-	love.graphics.print('FPS: ' .. tostring(love.timer.getFPS()), 10, 10)
 end

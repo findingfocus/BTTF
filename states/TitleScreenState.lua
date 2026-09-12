@@ -4,11 +4,21 @@ function TitleScreenState:init()
 
 end
 
+function TitleScreenState:enter()
+	-- CLEAN SLATE SO REPLAYS ALWAYS START THE SAME
+	gameSpeed = 0
+	obstacles = {}
+	spawnTimer = 1.5
+	BACKGROUND_SCROLL_SPEED = 0
+	MIDDLE_SCROLL_SPEED = 0
+	FRONT_SCROLL_SPEED = 0
+end
+
 function TitleScreenState:update(dt)
 	sounds['titleMusic']:setLooping(true)
 	sounds['titleMusic']:play()
 	
-	if love.keyboard.wasPressed('enter') or love.keyboard.wasPressed('return') then
+	if love.keyboard.wasPressed('enter') or love.keyboard.wasPressed('return') or love.keyboard.wasPressed('space') then
 		sounds['titleMusic']:stop()
 		gStateMachine:change('play')
 	end

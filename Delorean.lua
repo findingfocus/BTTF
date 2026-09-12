@@ -18,20 +18,21 @@ end
 function Delorean:update(dt)
 	self.dy = self.dy + GRAVITY * dt
 
-	--currently limits jumps, but this will probably be used for switching delorean pics
+	-- GROUNDED MEANS SHOW WHEELS, AIRBORNE MEANS SHOW FLYING MODE
 	if self.y == 265 then
 		grounded = true
 	else
 		grounded = false
 	end
 
-	--if grounded then
+	-- SPACEBAR FLIES THE CAR UP
 	if love.keyboard.wasPressed('space') then
-		self.dy = - 4
+		self.dy = -4.5
 	end
 
 	self.y = self.y + self.dy
 	self.y = math.min(VIRTUAL_HEIGHT -110, self.y)
+	self.y = math.max(0, self.y)
 end
 
 
