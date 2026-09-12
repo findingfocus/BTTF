@@ -58,8 +58,8 @@ function love.load()
 	love.graphics.setFont(normalFont)
 
 	sounds = {
-		['titleMusic'] = love.audio.newSource('sounds/MartysLetter.mp3', 'static'),
-		['playMusic'] = love.audio.newSource('sounds/Gigawatts.mp3', 'static'),
+		['titleMusic'] = love.audio.newSource('sounds/MartysLetter.mp3', 'stream'),
+		['playMusic'] = love.audio.newSource('sounds/Gigawatts.mp3', 'stream'),
 		['crash'] = love.audio.newSource('sounds/crash.mp3', 'static'),
 		['seriousStuff'] = love.audio.newSource('sounds/seriousStuff.mp3', 'static')
 	}
