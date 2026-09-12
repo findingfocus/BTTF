@@ -11,9 +11,9 @@ require '/states/PlayState'
 require '/states/TitleScreenState'
 require '/states/WinState'
 
--- WINDOW SIZE IN REAL PIXELS
-WINDOW_WIDTH = 1280
-WINDOW_HEIGHT = 800
+-- WINDOW SIZE IN REAL PIXELS, EXACTLY DOUBLE THE WORLD
+WINDOW_WIDTH = 1200
+WINDOW_HEIGHT = 750
 
 
 -- GAME WORLD SIZE IN VIRTUAL PIXELS, PUSH SCALES IT UP
@@ -65,7 +65,8 @@ function love.load()
 	push:setupScreen(VIRTUAL_WIDTH, VIRTUAL_HEIGHT, WINDOW_WIDTH, WINDOW_HEIGHT, {
 		vsync = true,
 		fullscreen = true,
-		resizable = true
+		resizable = false,
+		highdpi = false
 	})
 
 	gStateMachine = StateMachine {
